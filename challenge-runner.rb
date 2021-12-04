@@ -79,6 +79,14 @@ class ChallengeRunner
     puts "Total Epsilon Rate: #{measurer.epsilon_rate}"
     puts "Total Power: #{measurer.total_power}"
   end
+
+  def day3_challenge2(input)
+    measurer = PowerMeasurer.new(input, verbose: true)
+    puts "Total Measurements: #{measurer.total_measurements}"
+    puts "Oxygen Generator Rating: #{measurer.oxygen_generator_rating}"
+    puts "CO2 Scrubber Rating: #{measurer.co2_scrubber_rating}"
+    puts "Life Support Rating: #{measurer.life_support_rating}"
+  end
 end
 
 ChallengeRunner.run(*ARGV)
