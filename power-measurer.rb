@@ -27,12 +27,52 @@ class PowerMeasurer
     Binary.to_decimal(least_common_bits.join(''))
   end
 
-  def most_common_bit(position)
-    find_most_common_bit(position)
+  def life_support_rating
+    oxygen_generator_rating * co2_scrubber_rating
   end
 
-  def least_common_bit(position)
-    find_least_common_bit(position)
+  def oxygen_generator_rating
+    remaining_measurements = @measurements
+
+    total_bits.times do |position|
+      bit_value = most_common_bit(position, remaining_measurements)
+      remaining_measurements = bit_matched_measurements(bit_value, position, remaining_measurements)
+
+      break if remaining_measurements.size == 1
+    end
+
+    raise 'Could not find single oxygen generator measurement' if remaining_measurements.size > 1
+
+    Binary.to_decimal(remaining_measurements.first.bits.join(''))
+  end
+
+  def co2_scrubber_rating
+    remaining_measurements = @measurements
+
+    total_bits.times do |position|
+      bit_value = least_common_bit(position, remaining_measurements)
+      remaining_measurements = bit_matched_measurements(bit_value, position, remaining_measurements)
+
+      break if remaining_measurements.size == 1
+    end
+
+    raise 'Could not find single oxygen generator measurement' if remaining_measurements.size > 1
+
+    Binary.to_decimal(remaining_measurements.first.bits.join(''))
+  end
+
+  def most_common_bit(position, measurements = @measurements)
+    find_most_common_bit(position, measurements)
+  end
+
+  def least_common_bit(position, measurements = @measurements)
+    find_least_common_bit(position, measurements)
+  end
+
+  def bit_matched_measurements(bit_value, position, measurements = @measurements)
+    measurements.select do |measurement|
+      measurement.bits[position] == bit_value
+    end
   end
 
   private
@@ -59,8 +99,8 @@ class PowerMeasurer
     end
   end
 
-  def find_most_common_bit(position)
-    bits = @measurements.collect { |measurement| measurement.bits[position] }
+  def find_most_common_bit(position, measurements)
+    bits = measurements.collect { |measurement| measurement.bits[position] }
     one_count = 0
     zero_count = 0
 
@@ -72,11 +112,11 @@ class PowerMeasurer
       end
     end
 
-    one_count > zero_count ? 1 : 0
+    one_count >= zero_count ? 1 : 0
   end
 
-  def find_least_common_bit(position)
-    bits = @measurements.collect { |measurement| measurement.bits[position] }
+  def find_least_common_bit(position, measurements)
+    bits = measurements.collect { |measurement| measurement.bits[position] }
     one_count = 0
     zero_count = 0
 
@@ -88,6 +128,6 @@ class PowerMeasurer
       end
     end
 
-    one_count > zero_count ? 0 : 1
+    one_count >= zero_count ? 0 : 1
   end
 end
