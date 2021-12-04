@@ -1,8 +1,7 @@
 require 'rspec'
 require_relative '../depth-comparer.rb'
 
-RSpec.describe DepthComparer do
-  subject { described_class.new('100') }
+RSpec.describe DepthComparer do subject { described_class.new('100') }
 
   describe '#step' do
     context 'with no previous measurement' do
@@ -64,7 +63,7 @@ RSpec.describe DepthComparer do
 
   describe '#increase_count' do
     context 'with no previous measurement' do
-      before { subject.step }
+      before { subject.measure_all }
 
       it 'returns zero' do
         expect(subject.increase_count).to be_zero
@@ -74,7 +73,7 @@ RSpec.describe DepthComparer do
     context 'with second measurement a decrease in depth' do
       subject { described_class.new("100\n99") }
 
-      before { subject.step; subject.step }
+      before { subject.measure_all }
 
       it 'returns zero' do
         expect(subject.increase_count).to be_zero
@@ -84,7 +83,7 @@ RSpec.describe DepthComparer do
     context 'with second measurement greater than first' do
       subject { described_class.new("100\n101") }
 
-      before { subject.step; subject.step }
+      before { subject.measure_all }
 
       it 'returns 1' do
         expect(subject.increase_count).to eq 1
@@ -94,7 +93,7 @@ RSpec.describe DepthComparer do
     context 'with second measurement the same as first' do
       subject { described_class.new("100\n100") }
 
-      before { subject.step; subject.step }
+      before { subject.measure_all }
 
       it 'returns zero' do
         expect(subject.increase_count).to be_zero
@@ -104,7 +103,7 @@ RSpec.describe DepthComparer do
     context 'with all measurements decreasing' do
       subject { described_class.new("100\n99\n98") }
 
-      before { subject.step; subject.step; subject.step }
+      before { subject.measure_all }
 
       it 'returns zero' do
         expect(subject.increase_count).to be_zero
@@ -114,7 +113,7 @@ RSpec.describe DepthComparer do
     context 'with 1 measurement increasing in depth' do
       subject { described_class.new("100\n99\n100") }
 
-      before { subject.step; subject.step; subject.step }
+      before { subject.measure_all }
 
       it 'returns 1' do
         expect(subject.increase_count).to eq 1
@@ -124,10 +123,80 @@ RSpec.describe DepthComparer do
     context 'with all measurements increasing in depth' do
       subject { described_class.new("100\n101\n200") }
 
-      before { subject.step; subject.step; subject.step }
+      before { subject.measure_all }
 
       it 'returns 2' do
         expect(subject.increase_count).to eq 2
+      end
+    end
+  end
+
+  describe '#decrease_count' do
+    context 'with no previous measurement' do
+      before { subject.measure_all }
+
+      it 'returns zero' do
+        expect(subject.decrease_count).to be_zero
+      end
+    end
+
+    context 'with second measurement a decrease in depth' do
+      subject { described_class.new("100\n99") }
+
+      before { subject.measure_all }
+
+      it 'returns 1' do
+        expect(subject.decrease_count).to eq 1
+      end
+    end
+
+    context 'with second measurement greater than first' do
+      subject { described_class.new("100\n101") }
+
+      before { subject.measure_all }
+
+      it 'returns zero' do
+        expect(subject.decrease_count).to be_zero
+      end
+    end
+
+    context 'with second measurement the same as first' do
+      subject { described_class.new("100\n100") }
+
+      before { subject.measure_all }
+
+      it 'returns zero' do
+        expect(subject.decrease_count).to be_zero
+      end
+    end
+
+    context 'with all measurements decreasing' do
+      subject { described_class.new("100\n99\n98") }
+
+      before { subject.measure_all }
+
+      it 'returns 2' do
+        expect(subject.decrease_count).to eq 2
+      end
+    end
+
+    context 'with 1 measurement decreasing in depth' do
+      subject { described_class.new("100\n99\n100") }
+
+      before { subject.measure_all }
+
+      it 'returns 1' do
+        expect(subject.decrease_count).to eq 1
+      end
+    end
+
+    context 'with all measurements increasing in depth' do
+      subject { described_class.new("100\n101\n200") }
+
+      before { subject.measure_all }
+
+      it 'returns 0' do
+        expect(subject.decrease_count).to be_zero
       end
     end
   end

@@ -6,11 +6,19 @@ class DepthComparer
     NO_CHANGE = 'no change'
   ]
 
-  def initialize(depths = nil)
+  def initialize(depths, verbose: false)
     @depths = depths.split("\n").collect(&:to_i)
     @previous_depth = nil
     @position = 0
     @increase_count = 0
+    @decrease_count = 0
+    @verbose = verbose
+  end
+
+  def measure_all
+    while current_depth
+      step
+    end
   end
 
   def step
@@ -19,12 +27,15 @@ class DepthComparer
       msg = NO_PREVIOUS
     elsif current_depth < @previous_depth
       msg = DECREASED
+      @decrease_count += 1
     elsif current_depth > @previous_depth
       msg = INCREASED
       @increase_count += 1
     elsif current_depth == @previous_depth
       msg = NO_CHANGE
     end
+
+    puts "#{current_depth} (#{msg})" if @verbose
 
     @previous_depth = current_depth
     @position += 1
@@ -33,6 +44,14 @@ class DepthComparer
 
   def increase_count
     @increase_count
+  end
+
+  def decrease_count
+    @decrease_count
+  end
+
+  def total_depth_measurements
+    @depths.size
   end
 
   def current_depth
