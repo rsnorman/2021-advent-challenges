@@ -1,33 +1,42 @@
 class DepthComparer
+  COMPARISONS = [
+    NO_PREVIOUS = 'N/A - no previous measurement',
+    DECREASED = 'decreased',
+    INCREASED = 'increased',
+    NO_CHANGE = 'no change'
+  ]
+
   def initialize(depths = nil)
-    @depths = depths || File.read('./input/sub-depths.txt')
+    @depths = depths.split("\n").collect(&:to_i)
     @previous_depth = nil
-    @counter = 0
+    @position = 0
+    @increase_count = 0
   end
 
-  def measure
+  def step
     msg = nil
     if @previous_depth.nil?
-      msg = 'N/A - no previous measurement'
+      msg = NO_PREVIOUS
     elsif current_depth < @previous_depth
-      msg = 'decreased'
+      msg = DECREASED
     elsif current_depth > @previous_depth
-      msg = 'increased'
+      msg = INCREASED
+      @increase_count += 1
     elsif current_depth == @previous_depth
-      msg = 'no change'
+      msg = NO_CHANGE
     end
 
     @previous_depth = current_depth
-    @counter += 1
+    @position += 1
     msg
   end
 
-  def current_depth
-    depths[@counter]
+  def increase_count
+    @increase_count
   end
 
-  def depths
-    @depths.split("\n").collect(&:to_i)
+  def current_depth
+    @depths[@position]
   end
 end
 
