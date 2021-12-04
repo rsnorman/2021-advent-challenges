@@ -1,10 +1,15 @@
 require_relative 'depth-comparer.rb'
+require_relative 'course-reader.rb'
 
 class ChallengeRunner
   INPUTS = {
     day1: {
       real: 'sub-depths',
       test: 'test-depths'
+    },
+    day2: {
+      real: 'sub-navigation',
+      test: 'test-sub-navigation'
     }
   }
 
@@ -43,6 +48,23 @@ class ChallengeRunner
     puts "Total Depth Decreases: #{comparer.decrease_count}"
     puts "Total Depth Unchanges: #{comparer.unchanged_count}"
     puts "Total Depth Measurements: #{comparer.total_depth_measurements}"
+  end
+
+  def day2_challenge1(input)
+    reader = CourseReader.new(input, verbose: true)
+    puts "Total Moves: #{reader.total_moves}"
+    puts "Total Depth: #{reader.total_depth}"
+    puts "Horizontal Progress: #{reader.total_horizontal_progress}"
+    puts "Course Multiplied: #{reader.course_multiplied}"
+  end
+
+  def day2_challenge2(input)
+    reader = CourseReader.new(input, verbose: true)
+    reader.read_all
+    puts "Total Moves: #{reader.total_moves}"
+    puts "Total Depth: #{reader.total_depth}"
+    puts "Horizontal Progress: #{reader.total_horizontal_progress}"
+    puts "Course Multiplied: #{reader.course_multiplied}"
   end
 end
 
