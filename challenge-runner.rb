@@ -1,5 +1,6 @@
 require_relative 'depth-comparer.rb'
 require_relative 'course-reader.rb'
+require_relative 'power-measurer.rb'
 
 class ChallengeRunner
   INPUTS = {
@@ -10,6 +11,10 @@ class ChallengeRunner
     day2: {
       real: 'sub-navigation',
       test: 'test-sub-navigation'
+    },
+    day3: {
+      real: 'power-measurements',
+      test: 'test-power-measurements'
     }
   }
 
@@ -65,6 +70,14 @@ class ChallengeRunner
     puts "Total Depth: #{reader.total_depth}"
     puts "Horizontal Progress: #{reader.total_horizontal_progress}"
     puts "Course Multiplied: #{reader.course_multiplied}"
+  end
+
+  def day3_challenge1(input)
+    measurer = PowerMeasurer.new(input, verbose: true)
+    puts "Total Measurements: #{measurer.total_measurements}"
+    puts "Total Gamma Rate: #{measurer.gamma_rate}"
+    puts "Total Epsilon Rate: #{measurer.epsilon_rate}"
+    puts "Total Power: #{measurer.total_power}"
   end
 end
 
