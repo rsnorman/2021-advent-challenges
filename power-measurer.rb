@@ -12,24 +12,18 @@ class PowerMeasurer
   end
 
   def gamma_rate
-    most_common_bits = [
-      most_common_bit(0),
-      most_common_bit(1),
-      most_common_bit(2),
-      most_common_bit(3),
-      most_common_bit(4)
-    ]
+    most_common_bits = []
+    total_bits.times do |position|
+      most_common_bits << most_common_bit(position)
+    end
     Binary.to_decimal(most_common_bits.join(''))
   end
 
   def epsilon_rate
-    least_common_bits = [
-      least_common_bit(0),
-      least_common_bit(1),
-      least_common_bit(2),
-      least_common_bit(3),
-      least_common_bit(4)
-    ]
+    least_common_bits = []
+    total_bits.times do |position|
+      least_common_bits << least_common_bit(position)
+    end
     Binary.to_decimal(least_common_bits.join(''))
   end
 
@@ -53,6 +47,10 @@ class PowerMeasurer
         digit.to_i * 2**index
       end.sum
     end
+  end
+
+  def total_bits
+    @measurements.first.bits.size
   end
 
   def tokenize(measurements)
