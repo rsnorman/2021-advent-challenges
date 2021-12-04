@@ -1,7 +1,7 @@
 require 'rspec'
-require_relative '../measure-depth.rb'
+require_relative '../depth-comparer.rb'
 
-RSpec.describe DepthMeasurer do
+RSpec.describe DepthComparer do
   subject { described_class.new('100') }
 
   describe '#measure' do
