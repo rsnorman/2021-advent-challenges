@@ -3,6 +3,7 @@ class BingoBoard
     @spots = tokenize(spots)
     build_config
     @marked_spots = []
+    @last_marked_spot = nil
   end
 
   def spots
@@ -12,7 +13,10 @@ class BingoBoard
   def daub(number)
     @spots.each do |row|
       row.each do |spot|
-        spot.mark if spot.number == number
+        if spot.number == number
+          spot.mark
+          @last_marked_spot = spot
+        end
       end
     end
   end
@@ -21,8 +25,18 @@ class BingoBoard
     @potential_winning_configs.any?(&:complete?)
   end
 
+  def score
+    return 0 unless @last_marked_spot
+
+    unmarked_spots.sum * @last_marked_spot.number
+  end
+
   def marked_spots
     @spots.flatten.select(&:marked?).map(&:number)
+  end
+
+  def unmarked_spots
+    @spots.flatten.select { |spot| !spot.marked? }.map(&:number)
   end
 
   private

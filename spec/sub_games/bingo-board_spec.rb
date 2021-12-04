@@ -81,4 +81,48 @@ RSpec.describe BingoBoard do
       end
     end
   end
+
+  describe '#score' do
+    subject { described_class.new("1 2 3\n4 5 6\n7 8 9") }
+
+    context 'with not a winner' do
+      it 'returns 0' do
+        expect(subject.score).to be_zero
+      end
+    end
+
+    context 'with all numbers in row marked' do
+      before do
+        subject.daub(4)
+        subject.daub(5)
+        subject.daub(6)
+      end
+
+      it 'returns sum of all unmarked numbers times last marked number' do
+        expect(subject.score).to eq 180
+      end
+    end
+
+    context 'with all numbers in column marked' do
+      before do
+        subject.daub(2)
+        subject.daub(5)
+        subject.daub(8)
+      end
+
+      it 'returns sum of all unmarked numbers times last marked number' do
+        expect(subject.score).to eq 240
+      end
+    end
+
+    context 'with all numbers marked' do
+      before do
+        9.times { |num| subject.daub(num + 1) }
+      end
+
+      it 'returns 0' do
+        expect(subject.score).to be_zero
+      end
+    end
+  end
 end
