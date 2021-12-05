@@ -1,6 +1,7 @@
 require_relative 'depth-comparer.rb'
 require_relative 'course-reader.rb'
 require_relative 'power-measurer.rb'
+require_relative 'sub_games/bingo-game.rb'
 
 class ChallengeRunner
   INPUTS = {
@@ -15,6 +16,10 @@ class ChallengeRunner
     day3: {
       real: 'power-measurements',
       test: 'test-power-measurements'
+    },
+    day4: {
+      real: 'bingo-game',
+      test: 'test-bingo-game'
     }
   }
 
@@ -86,6 +91,12 @@ class ChallengeRunner
     puts "Oxygen Generator Rating: #{measurer.oxygen_generator_rating}"
     puts "CO2 Scrubber Rating: #{measurer.co2_scrubber_rating}"
     puts "Life Support Rating: #{measurer.life_support_rating}"
+  end
+
+  def day4_challenge1(input)
+    game = BingoGame.new(input, verbose: true)
+    game.call_all
+    puts "Winning Board Score: #{game.winning_board_score}"
   end
 end
 
