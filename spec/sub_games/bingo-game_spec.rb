@@ -69,13 +69,41 @@ RSpec.describe BingoGame do
         subject.call_number
       end
 
-      it 'markes the first board as a winner' do
+      it 'marks the first board as a winner' do
         expect(subject.boards.first).to be_winner
       end
 
       it 'doesn\'t mark the second board as a winner' do
         expect(subject.boards[1]).to_not be_winner
       end
+    end
+  end
+
+  describe '#call_all' do
+    before do
+      subject.call_all
+    end
+
+    subject { described_class.new("1 4 8 54 2 6\n\n1 2\n3 4\n\n5 6\n7 8") }
+
+    it 'marks the first board as a winner' do
+      expect(subject.boards.first).to be_winner
+    end
+
+    it 'doesn\'t mark the second board as a winner' do
+      expect(subject.boards[1]).to_not be_winner
+    end
+  end
+
+  describe '#winning_board_score' do
+    before do
+      subject.call_all
+    end
+
+    subject { described_class.new("1 4 8 54 2 6\n\n1 2\n3 4\n\n5 6\n7 8") }
+
+    it 'returns winning board score' do
+      expect(subject.winning_board_score).to eq 6
     end
   end
 end
