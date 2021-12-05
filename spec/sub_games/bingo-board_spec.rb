@@ -3,7 +3,7 @@ require_relative '../../sub_games/bingo-board.rb'
 
 RSpec.describe BingoBoard do
   describe '#spots' do
-    subject { described_class.new("1 2 3\n4 5 6\n7 8 9") }
+    subject { described_class.new(" 1  2  3\n 4  5  6\n7  8  9") }
 
     it 'returns all board spots' do
       expect(subject.spots).to eq([[1,2,3], [4,5,6], [7,8,9]])

@@ -41,7 +41,7 @@ class BingoGame
   private
 
   def tokenize(bingo_game_details)
-    calls = bingo_game_details.split("\n\n").first.split(' ').map(&:to_i)
+    calls = bingo_game_details.split("\n\n").first.split(',').map(&:to_i)
     boards = bingo_game_details.split("\n\n")[1..-1].map { |spots| BingoBoard.new(spots) }
     [calls, boards]
   end
