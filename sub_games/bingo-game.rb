@@ -3,6 +3,14 @@ require_relative 'bingo-board.rb'
 class BingoGame
   def initialize(bingo_game_details, verbose: false)
     @number_calls, @boards = tokenize(bingo_game_details)
+
+    @winning_boards = []
+    @boards.each do |board|
+      board.on_win do |board|
+        @winning_boards << board
+      end
+    end
+
     @current_call = 0
   end
 
@@ -17,8 +25,6 @@ class BingoGame
   def call_all
     @number_calls.size.times do
       call_number
-
-      break if winning_board?
     end
   end
 
@@ -31,11 +37,15 @@ class BingoGame
   end
 
   def winning_board?
-    @boards.any?(&:winner?)
+    @winning_boards.any?
   end
 
   def winning_board_score
-    @boards.find(&:winner?).score
+    @winning_boards.first.score
+  end
+
+  def last_winning_board_score
+    @winning_boards.last.score
   end
 
   private

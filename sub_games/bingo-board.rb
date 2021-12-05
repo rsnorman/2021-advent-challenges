@@ -4,6 +4,7 @@ class BingoBoard
     build_config
     @marked_spots = []
     @last_marked_spot = nil
+    @win_callbacks = []
   end
 
   def spots
@@ -11,6 +12,8 @@ class BingoBoard
   end
 
   def daub(number)
+    return if winner?
+
     @spots.each do |row|
       row.each do |spot|
         if spot.number == number
@@ -19,6 +22,8 @@ class BingoBoard
         end
       end
     end
+
+    @win_callbacks.each { |callback| callback.call(self) } if winner?
   end
 
   def winner?
@@ -43,6 +48,9 @@ class BingoBoard
     spots == board
   end
 
+  def on_win(&block)
+    @win_callbacks << block
+  end
 
   private
 
