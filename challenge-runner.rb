@@ -2,6 +2,7 @@ require_relative 'depth-comparer.rb'
 require_relative 'course-reader.rb'
 require_relative 'power-measurer.rb'
 require_relative 'sub_games/bingo-game.rb'
+require_relative 'vent-mapper.rb'
 
 class ChallengeRunner
   INPUTS = {
@@ -20,6 +21,10 @@ class ChallengeRunner
     day4: {
       real: 'bingo-game',
       test: 'test-bingo-game'
+    },
+    day5: {
+      real: 'vent-lines',
+      test: 'test-vent-lines'
     }
   }
 
@@ -103,6 +108,12 @@ class ChallengeRunner
     game = BingoGame.new(input, verbose: true)
     game.call_all
     puts "Winning Board Score: #{game.last_winning_board_score}"
+  end
+
+  def day5_challenge1(input)
+    mapper = VentMapper.new(input, verbose: true)
+    puts "Total Vents: #{mapper.vents.size}"
+    puts "Total Overlap Points: #{mapper.overlap_points}"
   end
 end
 
