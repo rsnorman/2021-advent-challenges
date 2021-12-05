@@ -27,10 +27,10 @@ RSpec.describe VentMapper do
   end
 
   describe '#vent_map' do
-    subject { described_class.new("0,9 -> 5,9\n8,0 -> 0,8") }
+    subject { described_class.new("0,9 -> 5,9") }
 
     it 'returns map width of max x coordinate' do
-      expect(subject.vent_map.first.size).to eq 9
+      expect(subject.vent_map.first.size).to eq 6
     end
 
     it 'returns map height of max y coordinate' do
@@ -46,9 +46,8 @@ RSpec.describe VentMapper do
       expect(subject.vent_map[9][5]).to eq 1
     end
 
-    it 'does\'t map non-overlapped vent' do
+    it 'doesn\'t map non-overlapped vent' do
       expect(subject.vent_map[8][0]).to eq 0
-      expect(subject.vent_map[9][6]).to eq 0
       expect(subject.vent_map[0][2]).to eq 0
       expect(subject.vent_map[0][0]).to eq 0
     end
@@ -58,7 +57,14 @@ RSpec.describe VentMapper do
 
       it 'maps overlapped vents' do
         expect(subject.vent_map[9][3]).to eq 2
-        puts subject.vent_map.inspect
+      end
+    end
+
+    context 'with overlapped diagonal vent' do
+      subject { described_class.new("0,4 -> 4,0\n0,0 -> 4,4") }
+
+      it 'maps overlapped vents' do
+        expect(subject.vent_map[2][2]).to eq 2
       end
     end
   end
@@ -73,7 +79,7 @@ RSpec.describe VentMapper do
     end
 
     context 'with single overlap point' do
-      subject { described_class.new("0,9 -> 5,9\n8,0 -> 0,8\n3,1 -> 3,9") }
+      subject { described_class.new("0,9 -> 5,9\n3,1 -> 3,9") }
 
       it 'returns 1 point' do
         expect(subject.overlap_points).to eq 1
@@ -81,7 +87,7 @@ RSpec.describe VentMapper do
     end
 
     context 'with multiple overlap points' do
-      subject { described_class.new("0,9 -> 5,9\n8,0 -> 0,8\n3,1 -> 3,9\n1,9 -> 2,9") }
+      subject { described_class.new("0,9 -> 5,9\n3,1 -> 3,9\n1,9 -> 2,9") }
 
       it 'returns 3 points' do
         expect(subject.overlap_points).to eq 3

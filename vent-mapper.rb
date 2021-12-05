@@ -38,16 +38,29 @@ class VentMapper
     end
 
     def line
+      min_x = [@start.x, @end.x].min
+      max_x = [@start.x, @end.x].max
+      min_y = [@start.y, @end.y].min
+      max_y = [@start.y, @end.y].max
+
       if @start.x == @end.x
-        ([@start.y, @end.y].min..[@start.y, @end.y].max).to_a.collect do |y_pos|
+        (min_y..max_y).to_a.collect do |y_pos|
           [@start.x, y_pos]
         end
       elsif @start.y == @end.y
-        ([@start.x, @end.x].min..[@start.x, @end.x].max).to_a.collect do |x_pos|
+        (min_x..max_x).to_a.collect do |x_pos|
           [x_pos, @start.y]
         end
       else
-        raise "Unable to build line for #{@start} -> #{@end}"
+        points = []
+        translation_x = 0
+        translation_y = 0
+        while points.last != [@end.x, @end.y]
+          points << [@start.x + translation_x, @start.y + translation_y]
+          translation_x += (@start.x < @end.x ? 1 : -1)
+          translation_y += (@start.y < @end.y ? 1 : -1)
+        end
+        points
       end
     end
 
@@ -87,7 +100,7 @@ class VentMapper
   end
 
   def map_vents
-    @vents.select(&:straight?).collect(&:line).each do |line|
+    @vents.collect(&:line).each do |line|
       line.each do |x, y|
         @vent_map[y][x] += 1
       end
