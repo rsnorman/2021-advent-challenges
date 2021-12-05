@@ -39,6 +39,11 @@ class BingoBoard
     @spots.flatten.select { |spot| !spot.marked? }.map(&:number)
   end
 
+  def ==(board)
+    spots == board
+  end
+
+
   private
 
   class Spot
