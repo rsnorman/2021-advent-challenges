@@ -98,6 +98,12 @@ class ChallengeRunner
     game.call_all
     puts "Winning Board Score: #{game.winning_board_score}"
   end
+
+  def day4_challenge2(input)
+    game = BingoGame.new(input, verbose: true)
+    game.call_all
+    puts "Winning Board Score: #{game.last_winning_board_score}"
+  end
 end
 
 ChallengeRunner.run(*ARGV)

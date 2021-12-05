@@ -114,15 +114,5 @@ RSpec.describe BingoBoard do
         expect(subject.score).to eq 240
       end
     end
-
-    context 'with all numbers marked' do
-      before do
-        9.times { |num| subject.daub(num + 1) }
-      end
-
-      it 'returns 0' do
-        expect(subject.score).to be_zero
-      end
-    end
   end
 end
