@@ -3,6 +3,7 @@ require_relative 'course-reader.rb'
 require_relative 'power-measurer.rb'
 require_relative 'sub_games/bingo-game.rb'
 require_relative 'vent-mapper.rb'
+require_relative 'fish-school-counter.rb'
 
 class ChallengeRunner
   INPUTS = {
@@ -25,6 +26,10 @@ class ChallengeRunner
     day5: {
       real: 'vent-lines',
       test: 'test-vent-lines'
+    },
+    day6: {
+      real: 'fish-school',
+      test: 'test-fish-school'
     }
   }
 
@@ -114,6 +119,13 @@ class ChallengeRunner
     mapper = VentMapper.new(input, verbose: true)
     puts "Total Vents: #{mapper.vents.size}"
     puts "Total Overlap Points: #{mapper.overlap_points}"
+  end
+
+  def day6_challenge1(input)
+    counter = FishSchoolCounter.new(input, verbose: true)
+    puts "Total Start Fish: #{counter.fish.size}"
+    counter.tick_days(80)
+    puts "Total End Fish: #{counter.fish.size}"
   end
 end
 
