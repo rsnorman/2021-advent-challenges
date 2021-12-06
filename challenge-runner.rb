@@ -122,10 +122,17 @@ class ChallengeRunner
   end
 
   def day6_challenge1(input)
-    counter = FishSchoolCounter.new(input, verbose: true)
-    puts "Total Start Fish: #{counter.fish.size}"
+    counter = FishSchoolCounter.new(input, strategy: :slow, verbose: true)
+    puts "Total Start Fish: #{counter.school_size}"
     counter.tick_days(80)
-    puts "Total End Fish: #{counter.fish.size}"
+    puts "Total End Fish: #{counter.school_size}"
+  end
+
+  def day6_challenge2(input)
+    counter = FishSchoolCounter.new(input, strategy: :fast, verbose: true)
+    puts "Total Start Fish: #{counter.school_size}"
+    counter.tick_days(256)
+    puts "Total End Fish: #{counter.school_size}"
   end
 end
 

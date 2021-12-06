@@ -24,6 +24,32 @@ RSpec.describe FishSchoolCounter do
         expect(subject.fish.map(&:timer)).to eq([3, 6, 0])
       end
     end
+
+    context 'with fast counter' do
+      context 'with no input' do
+        subject { described_class.new('', strategy: :fast) }
+
+        it 'returns no fish at any timer position' do
+          expect(subject.fish).to eq([0,0,0,0,0,0,0,0,0])
+        end
+      end
+
+      context 'with single fish timer' do
+        subject { described_class.new('3', strategy: :fast) }
+
+        it 'returns single fish with timer at 3' do
+          expect(subject.fish).to eq([0,0,0,1,0,0,0,0,0])
+        end
+      end
+
+      context 'with multiple timers' do
+        subject { described_class.new('3,6,0,3', strategy: :fast) }
+
+        it 'returns multiple fish with timers set appropriately ' do
+          expect(subject.fish).to eq([1,0,0,2,0,0,1,0,0])
+        end
+      end
+    end
   end
 
   describe '#tick' do
@@ -73,6 +99,45 @@ RSpec.describe FishSchoolCounter do
       it 'decrements fish timers except new fish' do
         subject.tick
         expect(subject.fish.map(&:timer)).to eq([2, 6, 5, 6, 8, 8])
+      end
+    end
+
+    context 'with fast counter' do
+      context 'with no fish at zero timer' do
+        subject { described_class.new('3,6', strategy: :fast) }
+
+        it 'decrements fish timers' do
+          subject.tick
+          expect(subject.fish).to eq([0,0,1,0,0,1,0,0,0])
+        end
+      end
+
+      context 'with one fish at zero timer' do
+        subject { described_class.new('3,0,6', strategy: :fast) }
+
+        it 'adds a fish to timer 8 position' do
+          subject.tick
+          expect(subject.fish[8]).to eq 1
+        end
+
+        it 'adds a fish to timer 6 position' do
+          subject.tick
+          expect(subject.fish[6]).to eq 1
+        end
+      end
+
+      context 'with multiple fish at zero timer' do
+        subject { described_class.new('3,0,7,0', strategy: :fast) }
+
+        it 'adds multiple fish to timer 8 position' do
+          subject.tick
+          expect(subject.fish[8]).to eq 2
+        end
+
+        it 'adds multiple fish to timer 6 position' do
+          subject.tick
+          expect(subject.fish[6]).to eq 3
+        end
       end
     end
   end
