@@ -4,6 +4,7 @@ require_relative 'power-measurer.rb'
 require_relative 'sub_games/bingo-game.rb'
 require_relative 'vent-mapper.rb'
 require_relative 'fish-school-counter.rb'
+require_relative 'crab-aligner.rb'
 
 class ChallengeRunner
   INPUTS = {
@@ -30,6 +31,10 @@ class ChallengeRunner
     day6: {
       real: 'fish-school',
       test: 'test-fish-school'
+    },
+    day7: {
+      real: 'crab-positions',
+      test: 'test-crab-positions'
     }
   }
 
@@ -133,6 +138,18 @@ class ChallengeRunner
     puts "Total Start Fish: #{counter.school_size}"
     counter.tick_days(256)
     puts "Total End Fish: #{counter.school_size}"
+  end
+
+  def day7_challenge1(input)
+    aligner = CrabAligner.new(input, verbose: true)
+    puts "Total Crabs: #{aligner.crabs.size}"
+    puts "Ideal Position: #{aligner.ideal_position}"
+  end
+
+  def day7_challenge2(input)
+    aligner = CrabAligner.new(input, fuel_use_calculator: :sequential, verbose: true)
+    puts "Total Crabs: #{aligner.crabs.size}"
+    puts "Ideal Position: #{aligner.ideal_position}"
   end
 end
 
